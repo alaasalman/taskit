@@ -1,0 +1,194 @@
+<ui version="4.0" >
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow" >
+  <property name="geometry" >
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>682</width>
+    <height>602</height>
+   </rect>
+  </property>
+  <property name="windowTitle" >
+   <string>MainWindow</string>
+  </property>
+  <widget class="QWidget" name="centralwidget" >
+   <widget class="QTreeWidget" name="treeWidget" >
+    <property name="geometry" >
+     <rect>
+      <x>0</x>
+      <y>0</y>
+      <width>681</width>
+      <height>511</height>
+     </rect>
+    </property>
+    <property name="alternatingRowColors" >
+     <bool>true</bool>
+    </property>
+    <property name="columnCount" >
+     <number>2</number>
+    </property>
+    <column>
+     <property name="text" >
+      <string>1</string>
+     </property>
+    </column>
+    <column>
+     <property name="text" >
+      <string>2</string>
+     </property>
+    </column>
+   </widget>
+  </widget>
+  <widget class="QStatusBar" name="statusbar" />
+  <widget class="QMenuBar" name="menuBar" >
+   <property name="geometry" >
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>682</width>
+     <height>25</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menuHelp" >
+    <property name="title" >
+     <string>Help</string>
+    </property>
+    <addaction name="actionAbout" />
+   </widget>
+   <widget class="QMenu" name="menuFile" >
+    <property name="title" >
+     <string>File</string>
+    </property>
+    <addaction name="actionSave" />
+    <addaction name="actionLoad" />
+    <addaction name="separator" />
+    <addaction name="actionExit" />
+   </widget>
+   <widget class="QMenu" name="menuOperations" >
+    <property name="title" >
+     <string>Operations</string>
+    </property>
+    <addaction name="actionAddCategory" />
+    <addaction name="actionRemoveCategory" />
+    <addaction name="separator" />
+    <addaction name="actionAddTask" />
+    <addaction name="actionRemoveTask" />
+    <addaction name="separator" />
+    <addaction name="actionClear" />
+   </widget>
+   <addaction name="menuFile" />
+   <addaction name="menuOperations" />
+   <addaction name="menuHelp" />
+  </widget>
+  <widget class="QToolBar" name="toolBar" >
+   <property name="orientation" >
+    <enum>Qt::Horizontal</enum>
+   </property>
+   <attribute name="toolBarArea" >
+    <number>4</number>
+   </attribute>
+   <addaction name="actionAddTask" />
+   <addaction name="actionRemoveTask" />
+   <addaction name="separator" />
+   <addaction name="actionAddCategory" />
+   <addaction name="actionRemoveCategory" />
+   <addaction name="separator" />
+   <addaction name="actionSave" />
+   <addaction name="actionLoad" />
+   <addaction name="separator" />
+   <addaction name="actionExit" />
+  </widget>
+  <action name="actionAddTask" >
+   <property name="icon" >
+    <iconset>IconResources/script_add.png</iconset>
+   </property>
+   <property name="text" >
+    <string>New Task</string>
+   </property>
+  </action>
+  <action name="actionRemoveTask" >
+   <property name="icon" >
+    <iconset>IconResources/script_delete.png</iconset>
+   </property>
+   <property name="text" >
+    <string>Remove Task</string>
+   </property>
+  </action>
+  <action name="actionExit" >
+   <property name="icon" >
+    <iconset>IconResources/door_in.png</iconset>
+   </property>
+   <property name="text" >
+    <string>Exit</string>
+   </property>
+  </action>
+  <action name="actionAddCategory" >
+   <property name="icon" >
+    <iconset>IconResources/book_add.png</iconset>
+   </property>
+   <property name="text" >
+    <string>New Category</string>
+   </property>
+  </action>
+  <action name="actionRemoveCategory" >
+   <property name="icon" >
+    <iconset>IconResources/book_delete.png</iconset>
+   </property>
+   <property name="text" >
+    <string>Remove Category</string>
+   </property>
+  </action>
+  <action name="actionAbout" >
+   <property name="icon" >
+    <iconset>IconResources/anchor.png</iconset>
+   </property>
+   <property name="text" >
+    <string>About</string>
+   </property>
+  </action>
+  <action name="actionSave" >
+   <property name="icon" >
+    <iconset>IconResources/disk.png</iconset>
+   </property>
+   <property name="text" >
+    <string>Save</string>
+   </property>
+  </action>
+  <action name="actionLoad" >
+   <property name="icon" >
+    <iconset>IconResources/folder_go.png</iconset>
+   </property>
+   <property name="text" >
+    <string>Load</string>
+   </property>
+  </action>
+  <action name="actionClear" >
+   <property name="icon" >
+    <iconset>IconResources/bin_empty.png</iconset>
+   </property>
+   <property name="text" >
+    <string>Clear</string>
+   </property>
+  </action>
+ </widget>
+ <resources/>
+ <connections>
+  <connection>
+   <sender>actionExit</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>close()</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>399</x>
+     <y>299</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+</ui>
