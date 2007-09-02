@@ -15,4 +15,13 @@ class GTDCategoryWidget(QtGui.QTreeWidgetItem):
         self.setText(idColumnIndex, str(p_CategoryId))
             
         self.setIcon(textColumnIndex, categoryIcon)
+        
+    def categoryId(self):
+        return self.text(idColumnIndex)
+        
+    def categoryText(self):
+        return self.text(textColumnIndex)
+    
+    def setCategoryText(self, p_CategoryText):
+        self.setText(textColumnIndex, p_CategoryText)
 

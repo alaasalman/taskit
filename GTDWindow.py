@@ -41,6 +41,8 @@ class GTDWindow(QtGui.QMainWindow):
         self.connect(self.ui.actionSave, QtCore.SIGNAL("triggered()"), self.saveDB)
         self.connect(self.ui.actionLoad, QtCore.SIGNAL("triggered()"), self.loadDB)
         self.connect(self.ui.actionClear, QtCore.SIGNAL("triggered()"), self.clearWindow)
+        self.connect(self.ui.actionEditTask, QtCore.SIGNAL("triggered()"), self.editTask)
+        self.connect(self.ui.actionEditCategory, QtCore.SIGNAL("triggered()"), self.editCategory)
         
 
     def addTask(self):
@@ -153,6 +155,58 @@ class GTDWindow(QtGui.QMainWindow):
             
     def clearWindow(self):
         self.ui.treeWidget.clear()
+        
+    def editCategory(self):
+        selectedCategory = self.ui.treeWidget.currentItem()
+        
+        if(selectedCategory != None):
+            
+            #just edit categories
+            if(not isinstance(selectedCategory, GTDCategoryWidget)):
+                return
+            
+            selectedCategoryText = selectedCategory.categoryText()
+                        
+            gtdCategoryInput = GTDCategoryInput()
+            gtdCategoryInput.setCategoryText(selectedCategoryText)
+            gtdCategoryInput.exec_()
+            
+            if(gtdCategoryInput.result() == GTDCategoryInput.Accepted):
+                #this returns QString so str() it
+                selectedCategoryId = str(selectedCategory.categoryId())
+                updatedCategoryText = str(gtdCategoryInput.categoryText())
+                
+                #dbHandler = self.dbHandler
+                
+                #dbHandler.editCategory(selectedCategoryId, updatedCategoryText)
+                
+                selectedCategory.setCategoryText(updatedCategoryText)
+                
+        
+        
+    def editTask(self):
+        selectedTask = self.ui.treeWidget.currentItem()
+        
+        if(selectedTask != None):
+            
+            if(not isinstance(selectedTask, GTDTaskWidget)):
+                return
+                
+        selectedTaskText = selectedTask.taskText()
+        
+        gtdTaskInput = GTDTaskInput()
+        gtdTaskInput.setCategoryText(selectedTask.taskCategoryText())
+        gtdTaskInput.setTaskText(selectedTaskText)
+        gtdTaskInput.exec_()
+        
+        if(gtdTaskInput.result() == GTDTaskInput.Accepted):
+            selectedTaskId = str(selectedTask.taskId())
+            updatedTaskText = str(gtdTaskInput.taskText())
+            
+            #dbHandler = self.dbHandler
+            #dbHandler.editTask(selectedTaskId, updatedTaskText)
+            
+            selectedTask.setTaskText(updatedTaskText)
             
             
             

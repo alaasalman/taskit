@@ -53,6 +53,29 @@ class DBHandler():
         
         return category.id
         
+    def editCategory(self, p_CategoryId, p_CategoryText):
+        session = self.session()
+        
+        #this is probably not needed for an update...see SA docs again
+        query = session.query(Category).filter(Category.id==p_CategoryId)
+        
+        cat = query.first()
+        cat.categorytitle = p_CategoryText
+        
+        session.update(cat)
+        session.commit()
+        
+    def editTask(self, p_TaskId, p_TaskText):
+        session = self.session()
+        
+        query = session.query(Task).filter(Task.id==p_TaskId)
+        
+        task = query.first()
+        task.tasktext = p_TaskText
+        
+        session.update(task)
+        session.commit()
+        
     def getAllCategories(self):
         session = self.session()
         

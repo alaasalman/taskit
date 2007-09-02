@@ -16,3 +16,20 @@ class GTDTaskWidget(QtGui.QTreeWidgetItem):
         self.setText(idColumnIndex, str(p_TaskId))
                 
         self.setIcon(textColumnIndex, taskIcon)
+        
+    def taskCategoryId(self):
+        taskCategory = self.parent()
+        return taskCategory.text(idColumnIndex)
+        
+    def taskCategoryText(self):
+        taskCategory = self.parent()
+        return taskCategory.text(textColumnIndex)
+        
+    def taskId(self):
+        return self.text(idColumnIndex)
+        
+    def taskText(self):
+        return self.text(textColumnIndex)
+        
+    def setTaskText(self, p_TaskText):
+        self.setText(textColumnIndex, p_TaskText)
