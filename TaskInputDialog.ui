@@ -38,7 +38,11 @@
      <widget class="QLineEdit" name="taskLineEdit" />
     </item>
     <item row="0" column="1" >
-     <widget class="QLineEdit" name="categoryLineEdit" />
+     <widget class="QLineEdit" name="categoryLineEdit" >
+      <property name="enabled" >
+       <bool>false</bool>
+      </property>
+     </widget>
     </item>
     <item row="1" column="0" >
      <widget class="QLabel" name="taskLabel" >

@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'TaskInputDialog.ui'
 #
-# Created: Sat Sep  1 08:42:41 2007
+# Created: Mon Sep  3 02:48:17 2007
 #      by: PyQt4 UI code generator 4.1
 #
 # WARNING! All changes made in this file will be lost!
@@ -31,6 +31,7 @@ class Ui_Dialog(object):
         self.gridlayout.addWidget(self.taskLineEdit,1,1,1,1)
 
         self.categoryLineEdit = QtGui.QLineEdit(self.layoutWidget)
+        self.categoryLineEdit.setEnabled(False)
         self.categoryLineEdit.setObjectName("categoryLineEdit")
         self.gridlayout.addWidget(self.categoryLineEdit,0,1,1,1)
 

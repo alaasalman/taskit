@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'MainForm.ui'
 #
-# Created: Sat Sep  1 08:42:41 2007
+# Created: Mon Sep  3 02:50:26 2007
 #      by: PyQt4 UI code generator 4.1
 #
 # WARNING! All changes made in this file will be lost!
@@ -33,14 +33,14 @@ class Ui_MainWindow(object):
         self.menuBar.setGeometry(QtCore.QRect(0,0,682,25))
         self.menuBar.setObjectName("menuBar")
 
+        self.menuFile = QtGui.QMenu(self.menuBar)
+        self.menuFile.setObjectName("menuFile")
+
         self.menuHelp = QtGui.QMenu(self.menuBar)
         self.menuHelp.setObjectName("menuHelp")
 
         self.menuOperations = QtGui.QMenu(self.menuBar)
         self.menuOperations.setObjectName("menuOperations")
-
-        self.menuFile = QtGui.QMenu(self.menuBar)
-        self.menuFile.setObjectName("menuFile")
         MainWindow.setMenuBar(self.menuBar)
 
         self.toolBar = QtGui.QToolBar(MainWindow)
@@ -91,18 +91,20 @@ class Ui_MainWindow(object):
         self.actionEditCategory = QtGui.QAction(MainWindow)
         self.actionEditCategory.setIcon(QtGui.QIcon("IconResources/book_edit.png"))
         self.actionEditCategory.setObjectName("actionEditCategory")
-        self.menuHelp.addAction(self.actionAbout)
-        self.menuOperations.addAction(self.actionAddCategory)
-        self.menuOperations.addAction(self.actionRemoveCategory)
-        self.menuOperations.addSeparator()
-        self.menuOperations.addAction(self.actionAddTask)
-        self.menuOperations.addAction(self.actionRemoveTask)
-        self.menuOperations.addSeparator()
-        self.menuOperations.addAction(self.actionClear)
         self.menuFile.addAction(self.actionSave)
         self.menuFile.addAction(self.actionLoad)
         self.menuFile.addSeparator()
         self.menuFile.addAction(self.actionExit)
+        self.menuHelp.addAction(self.actionAbout)
+        self.menuOperations.addAction(self.actionAddCategory)
+        self.menuOperations.addAction(self.actionEditCategory)
+        self.menuOperations.addAction(self.actionRemoveCategory)
+        self.menuOperations.addSeparator()
+        self.menuOperations.addAction(self.actionAddTask)
+        self.menuOperations.addAction(self.actionEditTask)
+        self.menuOperations.addAction(self.actionRemoveTask)
+        self.menuOperations.addSeparator()
+        self.menuOperations.addAction(self.actionClear)
         self.menuBar.addAction(self.menuFile.menuAction())
         self.menuBar.addAction(self.menuOperations.menuAction())
         self.menuBar.addAction(self.menuHelp.menuAction())
@@ -122,12 +124,12 @@ class Ui_MainWindow(object):
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
     def retranslateUi(self, MainWindow):
-        MainWindow.setWindowTitle(QtGui.QApplication.translate("MainWindow", "MainWindow", None, QtGui.QApplication.UnicodeUTF8))
+        MainWindow.setWindowTitle(QtGui.QApplication.translate("MainWindow", "TaskIt", None, QtGui.QApplication.UnicodeUTF8))
         self.treeWidget.headerItem().setText(0,QtGui.QApplication.translate("MainWindow", "1", None, QtGui.QApplication.UnicodeUTF8))
         self.treeWidget.headerItem().setText(1,QtGui.QApplication.translate("MainWindow", "2", None, QtGui.QApplication.UnicodeUTF8))
+        self.menuFile.setTitle(QtGui.QApplication.translate("MainWindow", "File", None, QtGui.QApplication.UnicodeUTF8))
         self.menuHelp.setTitle(QtGui.QApplication.translate("MainWindow", "Help", None, QtGui.QApplication.UnicodeUTF8))
         self.menuOperations.setTitle(QtGui.QApplication.translate("MainWindow", "Operations", None, QtGui.QApplication.UnicodeUTF8))
-        self.menuFile.setTitle(QtGui.QApplication.translate("MainWindow", "File", None, QtGui.QApplication.UnicodeUTF8))
         self.actionAddTask.setText(QtGui.QApplication.translate("MainWindow", "New Task", None, QtGui.QApplication.UnicodeUTF8))
         self.actionRemoveTask.setText(QtGui.QApplication.translate("MainWindow", "Remove Task", None, QtGui.QApplication.UnicodeUTF8))
         self.actionExit.setText(QtGui.QApplication.translate("MainWindow", "Exit", None, QtGui.QApplication.UnicodeUTF8))
