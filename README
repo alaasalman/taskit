@@ -1,0 +1,59 @@
+TaskIt - A GTD Task List Application
+----------------------------------
+
+
+About
+-----
+The TaskIt application aims to help you in your Getting things Done(GTD) 
+approach and thus provides a task list or a ToDo list. When you organize
+your thoughts and put them down in your TaskIt list, you will get a much
+better view of your tasks.
+
+
+Features
+--------
+The basic features of TaskIt are:
+- use categories to organize tasks
+
+
+
+Requirements
+------------
+For running TaskIt, you will need Python version 2.5.
+You also need the Qt framework version 4.3 or similar as well as the corresponding
+PyQt bindings. You can also need SQLAlchemy version 4.0.
+
+TaskIt also uses sqlite version 3 as its underlying database. I believe 
+that python sqlite bindings are now distributed as part of the vanilla python.
+
+Usage
+-----
+To run TaskIt just type
+$ ./taskit.py
+on a console 
+
+
+Windows
+-------
+TaskIt also runs under Windows. You just need to make sure that you get
+its dependencies. So make sure you have Python and Sqlite and PyQt as
+well as SQLAlchemy running on your platform and TaskIt should run just fine.
+
+
+License
+-------
+TaskIt is distributed under the terms of the GNU General Public License as published by the Free
+Software Foundation; either version 3 of the License, or (at your option) any later version.
+A copy of this license can be found in the file COPYING included with the source code of this
+program.
+
+
+Ideas, questions, patches and bug reports
+-----------------------------------------
+See http://www.codedemigod.com
+If you add something, or fix a bug, please send a bzr bundle to the author.
+
+
+--
+2007 by Alaa Salman
+alaa@codedemigod.com
