@@ -28,7 +28,7 @@ from Category import Category
 
 class DBHandler():
     def __init__(self):
-        engine = create_engine("sqlite:///tasklist.db", echo=True)
+        engine = create_engine("sqlite:///db/tasklist.db", echo=True)
         self.metadata = MetaData()
 
         tasks_table = Table("tasks", self.metadata,
