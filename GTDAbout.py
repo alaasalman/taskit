@@ -32,6 +32,7 @@ class GTDAbout(QtGui.QDialog):
             <body>
                 TaskIt GTD Application.
                 <p>Author: Alaa Salman</p>
+                <p>Uses the awesome famfamfam icons.</p>
             </body>
         </html>
         """
