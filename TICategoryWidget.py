@@ -17,26 +17,30 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 
-import sys
-from PyQt4 import QtGui
 from PyQt4 import QtCore
-from InputDialog import Ui_Dialog
+from PyQt4 import QtGui
 
-class GTDInput(QtGui.QDialog):
-    def __init__(self):
-        QtGui.QDialog.__init__(self)
-        self.ui = Ui_Dialog()
-        self.ui.setupUi(self)
+textColumnIndex = 0
+idColumnIndex = 1
+
+class TICategoryWidget(QtGui.QTreeWidgetItem):
+    
+    def __init__(self, p_CategoryText="", p_CategoryId=0):
+        QtGui.QTreeWidgetItem.__init__(self)
         
-    def taskText(self):
-        return self.ui.taskLineEdit.text()
+        categoryIcon = QtGui.QIcon("IconResources/book.png")
+        
+        self.setText(textColumnIndex, p_CategoryText)
+        self.setText(idColumnIndex, str(p_CategoryId))
+            
+        self.setIcon(textColumnIndex, categoryIcon)
+        
+    def categoryId(self):
+        return self.text(idColumnIndex)
         
     def categoryText(self):
-        return self.ui.categoryLineEdit.text()
-        
-    def setTaskText(self, newTaskText):
-        self.ui.taskLineEdit.setText(newTaskText)
-        
-    def setCategoryText(self, newCategoryText):
-        self.ui.categoryLineEdit.setText(newCategoryText)
-        
+        return self.text(textColumnIndex)
+    
+    def setCategoryText(self, p_CategoryText):
+        self.setText(textColumnIndex, p_CategoryText)
+

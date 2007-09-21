@@ -22,13 +22,13 @@
 import sys
 from PyQt4 import QtGui
 from PyQt4 import QtCore
-from GTDWindow import GTDWindow
+from TIMainWindow import TIMainWindow
 
     
 def main(args):
   app = QtGui.QApplication(sys.argv)
   
-  window = GTDWindow()
+  window = TIMainWindow()
   
   window.show()
   app.exec_()

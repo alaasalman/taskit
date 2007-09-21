@@ -23,7 +23,7 @@ from PyQt4 import QtGui
 textColumnIndex = 0
 idColumnIndex = 1
 
-class GTDTaskWidget(QtGui.QTreeWidgetItem):
+class TITaskWidget(QtGui.QTreeWidgetItem):
        
     def __init__(self, p_TaskText="", p_TaskId=0):
         

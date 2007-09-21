@@ -20,12 +20,14 @@
 import sys
 from PyQt4 import QtGui
 from PyQt4 import QtCore
-from AboutDialog import Ui_Dialog
 
-class GTDAbout(QtGui.QDialog):
+from ui import AboutDialog
+
+class TIAboutDialog(QtGui.QDialog):
     def __init__(self):
         QtGui.QDialog.__init__(self)
-        self.ui = Ui_Dialog()
+        
+        self.ui = AboutDialog.Ui_Dialog()
         self.ui.setupUi(self)
         
         htmlAboutAuthor = """<html>

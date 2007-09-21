@@ -20,23 +20,25 @@
 import sys
 from PyQt4 import QtGui
 from PyQt4 import QtCore
-from MainForm import Ui_MainWindow
-from GTDCategoryInput import GTDCategoryInput
-from GTDTaskInput import GTDTaskInput
-from GTDAbout import GTDAbout
-from DBHandler import DBHandler
-from GTDCategoryWidget import GTDCategoryWidget
-from GTDTaskWidget import GTDTaskWidget
 
+from ui import MainWindow
+from TICategoryDialog import TICategoryDialog
+from TITaskDialog import TITaskDialog
+from TIAboutDialog import TIAboutDialog
+
+from TICategoryWidget import TICategoryWidget
+from TITaskWidget import TITaskWidget
+
+from DBHandler import DBHandler
 
 textColumnIndex = 0
 idColumnIndex = 1
 
-class GTDWindow(QtGui.QMainWindow):
+class TIMainWindow(QtGui.QMainWindow):
     def __init__(self):
         
         QtGui.QMainWindow.__init__(self)
-        self.ui = Ui_MainWindow()
+        self.ui = MainWindow.Ui_MainWindow()
         self.ui.setupUi(self)
         
         headerLabels = QtCore.QStringList()
@@ -50,6 +52,7 @@ class GTDWindow(QtGui.QMainWindow):
         
         self.dbHandler = DBHandler()
         self.doConnections()
+        self.setActionIcons()
         
     def doConnections(self):
         self.connect(self.ui.actionAddTask, QtCore.SIGNAL("triggered()"), self.addTask)
@@ -63,6 +66,19 @@ class GTDWindow(QtGui.QMainWindow):
         self.connect(self.ui.actionEditTask, QtCore.SIGNAL("triggered()"), self.editTask)
         self.connect(self.ui.actionEditCategory, QtCore.SIGNAL("triggered()"), self.editCategory)
         
+    def setActionIcons(self):
+        self.ui.actionAddTask.setIcon(QtGui.QIcon("IconResources/script_add.png"))
+        self.ui.actionRemoveTask.setIcon(QtGui.QIcon("IconResources/script_delete.png"))
+        self.ui.actionExit.setIcon(QtGui.QIcon("IconResources/door_in.png"))
+        self.ui.actionAddCategory.setIcon(QtGui.QIcon("IconResources/book_add.png"))
+        self.ui.actionRemoveCategory.setIcon(QtGui.QIcon("IconResources/book_delete.png"))
+        self.ui.actionAbout.setIcon(QtGui.QIcon("IconResources/anchor.png"))
+        self.ui.actionSave.setIcon(QtGui.QIcon("IconResources/disk.png"))
+        self.ui.actionLoad.setIcon(QtGui.QIcon("IconResources/folder_go.png"))
+        self.ui.actionClear.setIcon(QtGui.QIcon("IconResources/bin_empty.png"))
+        self.ui.actionEditTask.setIcon(QtGui.QIcon("IconResources/script_edit.png"))
+        self.ui.actionEditCategory.setIcon(QtGui.QIcon("IconResources/book_edit.png"))
+        
 
     def addTask(self):
         #this is not necessarily a category, can be a task and the user
@@ -72,20 +88,20 @@ class GTDWindow(QtGui.QMainWindow):
         if(selectedItem != None):
             
             #for now, we don't allow tasks to have subtasks
-            if(isinstance(selectedItem, GTDTaskWidget)):
+            if(isinstance(selectedItem, TITaskWidget)):
                 return
                 
-            gtdTaskInput = GTDTaskInput()
+            taskDialog = TITaskDialog()
             
             selectedCategoryText = selectedItem.text(textColumnIndex)
-            gtdTaskInput.setCategoryText(selectedCategoryText)
+            taskDialog.setCategoryText(selectedCategoryText)
             
-            gtdTaskInput.exec_()
+            taskDialog.exec_()
             
-            if(gtdTaskInput.result() == GTDTaskInput.Accepted):
-                taskText = gtdTaskInput.taskText()
+            if(taskDialog.result() == TITaskDialog.Accepted):
+                taskText = taskDialog.taskText()
                 
-                taskWidget = GTDTaskWidget(taskText)
+                taskWidget = TITaskWidget(taskText)
             
                 selectedItem.addChild(taskWidget)
                 self.ui.treeWidget.expandItem(selectedItem)
@@ -103,13 +119,13 @@ class GTDWindow(QtGui.QMainWindow):
         
         
     def addCategory(self):
-        gtdInput = GTDCategoryInput()
-        gtdInput.exec_()
+        categoryDialog = TICategoryDialog()
+        categoryDialog.exec_()
         
-        if(gtdInput.result() == GTDCategoryInput.Accepted):
-            categoryText = gtdInput.categoryText()
+        if(categoryDialog.result() == TICategoryDialog.Accepted):
+            categoryText = categoryDialog.categoryText()
                         
-            categoryWidget = GTDCategoryWidget(categoryText)
+            categoryWidget = TICategoryWidget(categoryText)
             
             self.ui.treeWidget.addTopLevelItem(categoryWidget)
             self.ui.treeWidget.expandItem(categoryWidget)
@@ -119,8 +135,8 @@ class GTDWindow(QtGui.QMainWindow):
         self.ui.treeWidget.takeTopLevelItem(selectedCategoryIndex)
         
     def displayAbout(self):
-        gtdAbout = GTDAbout()
-        gtdAbout.exec_()
+        aboutDialog = TIAboutDialog()
+        aboutDialog.exec_()
         
     def saveDB(self):
         treeModel = self.ui.treeWidget.model()
@@ -161,11 +177,11 @@ class GTDWindow(QtGui.QMainWindow):
         for cat in categories:
             tasksByCategory = dbHandler.getTasksByCategory(cat)
             
-            categoryWidget = GTDCategoryWidget(cat.categorytitle, cat.id)
+            categoryWidget = TICategoryWidget(cat.categorytitle, cat.id)
             
             if(tasksByCategory != None):
                 for task in tasksByCategory:
-                    taskWidget = GTDTaskWidget(task.tasktext, task.id)
+                    taskWidget = TITaskWidget(task.tasktext, task.id)
                     categoryWidget.addChild(taskWidget)
             
             self.ui.treeWidget.addTopLevelItem(categoryWidget)
@@ -181,19 +197,19 @@ class GTDWindow(QtGui.QMainWindow):
         if(selectedCategory != None):
             
             #just edit categories
-            if(not isinstance(selectedCategory, GTDCategoryWidget)):
+            if(not isinstance(selectedCategory, TICategoryWidget)):
                 return
             
             selectedCategoryText = selectedCategory.categoryText()
                         
-            gtdCategoryInput = GTDCategoryInput()
-            gtdCategoryInput.setCategoryText(selectedCategoryText)
-            gtdCategoryInput.exec_()
+            categoryInput = TICategoryDialog()
+            categoryInput.setCategoryText(selectedCategoryText)
+            categoryInput.exec_()
             
-            if(gtdCategoryInput.result() == GTDCategoryInput.Accepted):
+            if(categoryInput.result() == TICategoryDialog.Accepted):
                 #this returns QString so str() it
                 selectedCategoryId = str(selectedCategory.categoryId())
-                updatedCategoryText = str(gtdCategoryInput.categoryText())
+                updatedCategoryText = str(categoryInput.categoryText())
                 
                 #dbHandler = self.dbHandler
                 
@@ -208,24 +224,23 @@ class GTDWindow(QtGui.QMainWindow):
         
         if(selectedTask != None):
             
-            if(not isinstance(selectedTask, GTDTaskWidget)):
+            if(not isinstance(selectedTask, TITaskWidget)):
                 return
                 
         selectedTaskText = selectedTask.taskText()
         
-        gtdTaskInput = GTDTaskInput()
-        gtdTaskInput.setCategoryText(selectedTask.taskCategoryText())
-        gtdTaskInput.setTaskText(selectedTaskText)
-        gtdTaskInput.exec_()
+        taskInput = TITaskDialog()
+        taskInput.setCategoryText(selectedTask.taskCategoryText())
+        taskInput.setTaskText(selectedTaskText)
+        taskInput.exec_()
         
-        if(gtdTaskInput.result() == GTDTaskInput.Accepted):
+        if(taskInput.result() == TITaskDialog.Accepted):
             selectedTaskId = str(selectedTask.taskId())
-            updatedTaskText = str(gtdTaskInput.taskText())
+            updatedTaskText = str(taskInput.taskText())
             
             #dbHandler = self.dbHandler
             #dbHandler.editTask(selectedTaskId, updatedTaskText)
             
             selectedTask.setTaskText(updatedTaskText)
-            
             
             

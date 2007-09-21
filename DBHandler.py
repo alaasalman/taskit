@@ -23,8 +23,8 @@ from sqlalchemy.orm import sessionmaker
 from sqlalchemy.orm import session
 from sqlalchemy.orm import relation
 
-from Task import Task
-from Category import Category
+from model.Task import Task
+from model.Category import Category
 
 class DBHandler():
     def __init__(self):

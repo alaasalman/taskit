@@ -1,21 +1,3 @@
-<!--
-    Copyright 2007 Alaa Salman <alaa@codedemigod.com>
-    
-    This file is part of TaskIt.
-
-    TaskIt is free software; you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation; either version 3 of the License, or
-    (at your option) any later version.
-
-    TaskIt is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with this program.  If not, see <http://www.gnu.org/licenses/>.
--->
 <ui version="4.0" >
  <class>MainWindow</class>
  <widget class="QMainWindow" name="MainWindow" >
@@ -121,7 +103,7 @@
   </widget>
   <action name="actionAddTask" >
    <property name="icon" >
-    <iconset>IconResources/script_add.png</iconset>
+    <iconset>../IconResources/script_add.png</iconset>
    </property>
    <property name="text" >
     <string>New Task</string>
@@ -129,7 +111,7 @@
   </action>
   <action name="actionRemoveTask" >
    <property name="icon" >
-    <iconset>IconResources/script_delete.png</iconset>
+    <iconset>../IconResources/script_delete.png</iconset>
    </property>
    <property name="text" >
     <string>Remove Task</string>
@@ -137,7 +119,7 @@
   </action>
   <action name="actionExit" >
    <property name="icon" >
-    <iconset>IconResources/door_in.png</iconset>
+    <iconset>../IconResources/door_in.png</iconset>
    </property>
    <property name="text" >
     <string>Exit</string>
@@ -145,7 +127,7 @@
   </action>
   <action name="actionAddCategory" >
    <property name="icon" >
-    <iconset>IconResources/book_add.png</iconset>
+    <iconset>../IconResources/book_add.png</iconset>
    </property>
    <property name="text" >
     <string>New Category</string>
@@ -153,7 +135,7 @@
   </action>
   <action name="actionRemoveCategory" >
    <property name="icon" >
-    <iconset>IconResources/book_delete.png</iconset>
+    <iconset>../IconResources/book_delete.png</iconset>
    </property>
    <property name="text" >
     <string>Remove Category</string>
@@ -161,7 +143,7 @@
   </action>
   <action name="actionAbout" >
    <property name="icon" >
-    <iconset>IconResources/anchor.png</iconset>
+    <iconset>../IconResources/anchor.png</iconset>
    </property>
    <property name="text" >
     <string>About</string>
@@ -169,7 +151,7 @@
   </action>
   <action name="actionSave" >
    <property name="icon" >
-    <iconset>IconResources/disk.png</iconset>
+    <iconset>../IconResources/disk.png</iconset>
    </property>
    <property name="text" >
     <string>Save</string>
@@ -177,7 +159,7 @@
   </action>
   <action name="actionLoad" >
    <property name="icon" >
-    <iconset>IconResources/folder_go.png</iconset>
+    <iconset>../IconResources/folder_go.png</iconset>
    </property>
    <property name="text" >
     <string>Load</string>
@@ -185,7 +167,7 @@
   </action>
   <action name="actionClear" >
    <property name="icon" >
-    <iconset>IconResources/bin_empty.png</iconset>
+    <iconset>../IconResources/bin_empty.png</iconset>
    </property>
    <property name="text" >
     <string>Clear</string>
@@ -193,7 +175,7 @@
   </action>
   <action name="actionEditTask" >
    <property name="icon" >
-    <iconset>IconResources/script_edit.png</iconset>
+    <iconset>../IconResources/script_edit.png</iconset>
    </property>
    <property name="text" >
     <string>Edit Task</string>
@@ -201,7 +183,7 @@
   </action>
   <action name="actionEditCategory" >
    <property name="icon" >
-    <iconset>IconResources/book_edit.png</iconset>
+    <iconset>../IconResources/book_edit.png</iconset>
    </property>
    <property name="text" >
     <string>Edit Category</string>
