@@ -41,6 +41,9 @@ class TIMainWindow(QtGui.QMainWindow):
         self.ui = MainWindow.Ui_MainWindow()
         self.ui.setupUi(self)
         
+        self.modified = False
+        self.title = self.windowTitle()
+        
         headerLabels = QtCore.QStringList()
         
         headerLabels += "Task List"
@@ -65,6 +68,7 @@ class TIMainWindow(QtGui.QMainWindow):
         self.connect(self.ui.actionClear, QtCore.SIGNAL("triggered()"), self.clearWindow)
         self.connect(self.ui.actionEditTask, QtCore.SIGNAL("triggered()"), self.editTask)
         self.connect(self.ui.actionEditCategory, QtCore.SIGNAL("triggered()"), self.editCategory)
+        self.connect(self.ui.actionExit, QtCore.SIGNAL("triggered()"), self.exit)
         
     def setActionIcons(self):
         self.ui.actionAddTask.setIcon(QtGui.QIcon("IconResources/script_add.png"))
@@ -105,6 +109,7 @@ class TIMainWindow(QtGui.QMainWindow):
             
                 selectedItem.addChild(taskWidget)
                 self.ui.treeWidget.expandItem(selectedItem)
+                self.tasklistModification(True)
         
     def removeTask(self):
         #this could be a task or a subtask
@@ -116,6 +121,7 @@ class TIMainWindow(QtGui.QMainWindow):
             if(selectedItemParent != None):
                 selectedTaskIndex = self.ui.treeWidget.currentIndex().row()
                 selectedItemParent.takeChild(selectedTaskIndex)
+                self.tasklistModification(True)
         
         
     def addCategory(self):
@@ -129,16 +135,26 @@ class TIMainWindow(QtGui.QMainWindow):
             
             self.ui.treeWidget.addTopLevelItem(categoryWidget)
             self.ui.treeWidget.expandItem(categoryWidget)
+            self.tasklistModification(True)
         
     def removeCategory(self):
         selectedCategoryIndex = self.ui.treeWidget.currentIndex().row()
         self.ui.treeWidget.takeTopLevelItem(selectedCategoryIndex)
+        self.tasklistModification(True)
         
     def displayAbout(self):
         aboutDialog = TIAboutDialog()
         aboutDialog.exec_()
         
     def saveDB(self):
+        if(self.isModified() == True):
+            buttonChoice = QtGui.QMessageBox.warning(self, self.title, "Are you sure you want to overwrite?",
+                                                        QtGui.QMessageBox.Yes | QtGui.QMessageBox.No, QtGui.QMessageBox.No)
+            if(buttonChoice == QtGui.QMessageBox.No):
+                return
+        else: # no modifications, don't do any work
+            return
+                
         treeModel = self.ui.treeWidget.model()
         dbHandler = self.dbHandler
         
@@ -164,11 +180,17 @@ class TIMainWindow(QtGui.QMainWindow):
                     
                     task_id = dbHandler.addTask(taskText, category_id)
                     childModel.setData(childModelIdIndex, QtCore.QVariant(task_id))
-                    
+            
+            self.tasklistModification(False)        
         
         
     def loadDB(self):
-        
+        if(self.isModified() == True):
+            buttonChoice = QtGui.QMessageBox.warning(self, self.title, "You have unsaved modifications, are you sure you want to overwrite?",
+                                                        QtGui.QMessageBox.Yes | QtGui.QMessageBox.No, QtGui.QMessageBox.No)
+            if(buttonChoice == QtGui.QMessageBox.No):
+                return
+                                                            
         self.ui.treeWidget.clear()
         
         dbHandler = self.dbHandler
@@ -186,10 +208,12 @@ class TIMainWindow(QtGui.QMainWindow):
             
             self.ui.treeWidget.addTopLevelItem(categoryWidget)
             self.ui.treeWidget.expandItem(categoryWidget)
+            self.tasklistModification(False)
             
             
     def clearWindow(self):
         self.ui.treeWidget.clear()
+        self.tasklistModification(True)
         
     def editCategory(self):
         selectedCategory = self.ui.treeWidget.currentItem()
@@ -216,7 +240,7 @@ class TIMainWindow(QtGui.QMainWindow):
                 #dbHandler.editCategory(selectedCategoryId, updatedCategoryText)
                 
                 selectedCategory.setCategoryText(updatedCategoryText)
-                
+                self.tasklistModification(True)
         
         
     def editTask(self):
@@ -242,5 +266,41 @@ class TIMainWindow(QtGui.QMainWindow):
             #dbHandler.editTask(selectedTaskId, updatedTaskText)
             
             selectedTask.setTaskText(updatedTaskText)
+            self.tasklistModification(True)
+    
+    #return status of modification
+    #TODO modified() seems to confuse python because it shares a name with an instance variable
+    def isModified(self):
+        return self.modified
+    
+    def setModified(self, p_ModifiedStatus):
+        self.modified = p_ModifiedStatus
             
+    def tasklistModification(self, p_ModificationStatus):
+        
+        #we're not in modification state
+        if(self.isModified() == False):
+            if(p_ModificationStatus == True):
+                self.setModified(True)
+                self.setWindowTitle(self.title + "*")
+            else:
+                return
+        else: #previous modification
+            if(p_ModificationStatus == False):
+                self.setModified(False)
+                self.setWindowTitle(self.title)
+            else:
+                return
+                
+    def exit(self):
+        if(self.isModified() == True):
+            buttonChoice = QtGui.QMessageBox.warning(self, self.title, "You have unsaved modifications, are you sure you want to quit?",
+                                                        QtGui.QMessageBox.Yes | QtGui.QMessageBox.No, QtGui.QMessageBox.No)
+                                                        
+            if(buttonChoice == QtGui.QMessageBox.Yes):
+                self.close()
+            else:
+                return
+        else:
+            self.close()
             
