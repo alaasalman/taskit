@@ -251,22 +251,22 @@ class TIMainWindow(QtGui.QMainWindow):
             if(not isinstance(selectedTask, TITaskWidget)):
                 return
                 
-        selectedTaskText = selectedTask.taskText()
-        
-        taskInput = TITaskDialog()
-        taskInput.setCategoryText(selectedTask.taskCategoryText())
-        taskInput.setTaskText(selectedTaskText)
-        taskInput.exec_()
-        
-        if(taskInput.result() == TITaskDialog.Accepted):
-            selectedTaskId = str(selectedTask.taskId())
-            updatedTaskText = str(taskInput.taskText())
+            selectedTaskText = selectedTask.taskText()
             
-            #dbHandler = self.dbHandler
-            #dbHandler.editTask(selectedTaskId, updatedTaskText)
+            taskInput = TITaskDialog()
+            taskInput.setCategoryText(selectedTask.taskCategoryText())
+            taskInput.setTaskText(selectedTaskText)
+            taskInput.exec_()
             
-            selectedTask.setTaskText(updatedTaskText)
-            self.tasklistModification(True)
+            if(taskInput.result() == TITaskDialog.Accepted):
+                selectedTaskId = str(selectedTask.taskId())
+                updatedTaskText = str(taskInput.taskText())
+                
+                #dbHandler = self.dbHandler
+                #dbHandler.editTask(selectedTaskId, updatedTaskText)
+                
+                selectedTask.setTaskText(updatedTaskText)
+                self.tasklistModification(True)
     
     #return status of modification
     #TODO modified() seems to confuse python because it shares a name with an instance variable
