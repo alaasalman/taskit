@@ -24,8 +24,8 @@ from PyQt4 import QtCore
 from ui import AboutDialog
 
 class TIAboutDialog(QtGui.QDialog):
-    def __init__(self):
-        QtGui.QDialog.__init__(self)
+    def __init__(self, p_Parent = None):
+        QtGui.QDialog.__init__(self, p_Parent)
         
         self.ui = AboutDialog.Ui_Dialog()
         self.ui.setupUi(self)

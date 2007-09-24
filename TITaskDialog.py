@@ -24,8 +24,8 @@ from PyQt4 import QtCore
 from ui import TaskInputDialog
 
 class TITaskDialog(QtGui.QDialog):
-    def __init__(self):
-        QtGui.QDialog.__init__(self)
+    def __init__(self, p_Parent = None):
+        QtGui.QDialog.__init__(self, p_Parent)
         
         self.ui = TaskInputDialog.Ui_Dialog()
         self.ui.setupUi(self)

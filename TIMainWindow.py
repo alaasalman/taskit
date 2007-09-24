@@ -95,7 +95,7 @@ class TIMainWindow(QtGui.QMainWindow):
             if(isinstance(selectedItem, TITaskWidget)):
                 return
                 
-            taskDialog = TITaskDialog()
+            taskDialog = TITaskDialog(self)
             
             selectedCategoryText = selectedItem.text(textColumnIndex)
             taskDialog.setCategoryText(selectedCategoryText)
@@ -125,7 +125,7 @@ class TIMainWindow(QtGui.QMainWindow):
         
         
     def addCategory(self):
-        categoryDialog = TICategoryDialog()
+        categoryDialog = TICategoryDialog(self)
         categoryDialog.exec_()
         
         if(categoryDialog.result() == TICategoryDialog.Accepted):
@@ -143,7 +143,7 @@ class TIMainWindow(QtGui.QMainWindow):
         self.tasklistModification(True)
         
     def displayAbout(self):
-        aboutDialog = TIAboutDialog()
+        aboutDialog = TIAboutDialog(self)
         aboutDialog.exec_()
         
     def saveDB(self):
@@ -226,7 +226,7 @@ class TIMainWindow(QtGui.QMainWindow):
             
             selectedCategoryText = selectedCategory.categoryText()
                         
-            categoryInput = TICategoryDialog()
+            categoryInput = TICategoryDialog(self)
             categoryInput.setCategoryText(selectedCategoryText)
             categoryInput.exec_()
             
@@ -253,7 +253,7 @@ class TIMainWindow(QtGui.QMainWindow):
                 
             selectedTaskText = selectedTask.taskText()
             
-            taskInput = TITaskDialog()
+            taskInput = TITaskDialog(self)
             taskInput.setCategoryText(selectedTask.taskCategoryText())
             taskInput.setTaskText(selectedTaskText)
             taskInput.exec_()
