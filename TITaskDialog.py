@@ -31,14 +31,17 @@ class TITaskDialog(QtGui.QDialog):
         self.ui.setupUi(self)
         
     def taskText(self):
-        return self.ui.taskLineEdit.text()
+        return self.ui.taskTextEdit.toPlainText()
         
     def categoryText(self):
         return self.ui.categoryLineEdit.text()
         
     def setTaskText(self, newTaskText):
-        self.ui.taskLineEdit.setText(newTaskText)
+        self.ui.taskTextEdit.setText(newTaskText)
         
     def setCategoryText(self, newCategoryText):
         self.ui.categoryLineEdit.setText(newCategoryText)
+        
+    def setReadOnlyMode(self):
+        self.ui.taskTextEdit.setEnabled(False)
         

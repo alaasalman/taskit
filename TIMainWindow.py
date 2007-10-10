@@ -69,6 +69,7 @@ class TIMainWindow(QtGui.QMainWindow):
         self.connect(self.ui.actionEditTask, QtCore.SIGNAL("triggered()"), self.editTask)
         self.connect(self.ui.actionEditCategory, QtCore.SIGNAL("triggered()"), self.editCategory)
         self.connect(self.ui.actionExit, QtCore.SIGNAL("triggered()"), self.exit)
+        self.connect(self.ui.treeWidget, QtCore.SIGNAL("itemDoubleClicked(QTreeWidgetItem*, int)"), self.__displayTask)
         
     def setActionIcons(self):
         self.ui.actionAddTask.setIcon(QtGui.QIcon("IconResources/script_add.png"))
@@ -291,6 +292,27 @@ class TIMainWindow(QtGui.QMainWindow):
                 self.setWindowTitle(self.title)
             else:
                 return
+    
+    def __displayTask(self, item, column):
+        
+        if(item != None):
+                        
+            if(not isinstance(item, TITaskWidget)):
+                return
+            
+            selectedTaskCategoryWidget = item.parent()
+            
+            taskDialog = TITaskDialog(self)
+            
+            
+            selectedTaskText = item.text(textColumnIndex)
+            selectedCategoryText = selectedTaskCategoryWidget.text(textColumnIndex)
+            taskDialog.setCategoryText(selectedCategoryText)
+            taskDialog.setTaskText(selectedTaskText)
+            
+            taskDialog.setReadOnlyMode()
+            taskDialog.exec_()
+                        
                 
     def exit(self):
         if(self.isModified() == True):
