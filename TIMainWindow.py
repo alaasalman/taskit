@@ -56,6 +56,8 @@ class TIMainWindow(QtGui.QMainWindow):
         self.dbHandler = DBHandler()
         self.doConnections()
         self.setActionIcons()
+
+        self.loadDB()
         
     def doConnections(self):
         self.connect(self.ui.actionAddTask, QtCore.SIGNAL("triggered()"), self.addTask)
@@ -63,12 +65,9 @@ class TIMainWindow(QtGui.QMainWindow):
         self.connect(self.ui.actionAddCategory, QtCore.SIGNAL("triggered()"), self.addCategory)
         self.connect(self.ui.actionRemoveCategory, QtCore.SIGNAL("triggered()"), self.removeCategory)
         self.connect(self.ui.actionAbout, QtCore.SIGNAL("triggered()"), self.displayAbout)
-        self.connect(self.ui.actionSave, QtCore.SIGNAL("triggered()"), self.saveDB)
-        self.connect(self.ui.actionLoad, QtCore.SIGNAL("triggered()"), self.loadDB)
-        self.connect(self.ui.actionClear, QtCore.SIGNAL("triggered()"), self.clearWindow)
         self.connect(self.ui.actionEditTask, QtCore.SIGNAL("triggered()"), self.editTask)
         self.connect(self.ui.actionEditCategory, QtCore.SIGNAL("triggered()"), self.editCategory)
-        self.connect(self.ui.actionExit, QtCore.SIGNAL("triggered()"), self.exit)
+        self.connect(self.ui.actionExit, QtCore.SIGNAL("triggered()"), self.close)
         self.connect(self.ui.treeWidget, QtCore.SIGNAL("itemDoubleClicked(QTreeWidgetItem*, int)"), self.__displayTask)
         
     def setActionIcons(self):
@@ -86,38 +85,77 @@ class TIMainWindow(QtGui.QMainWindow):
         
 
     def addTask(self):
-        #this is not necessarily a category, can be a task and the user
-        #is adding subtasks
-        selectedItem = self.ui.treeWidget.currentItem()
+
+        selectedCategory = self.ui.treeWidget.currentItem()
         
-        if(selectedItem != None):
+        if(selectedCategory != None):
             
             #for now, we don't allow tasks to have subtasks
-            if(isinstance(selectedItem, TITaskWidget)):
+            if(isinstance(selectedCategory, TITaskWidget)):
                 return
                 
             taskDialog = TITaskDialog(self)
             
-            selectedCategoryText = selectedItem.text(textColumnIndex)
+            selectedCategoryText = selectedCategory.categoryText()
+            selectedCategoryId = selectedCategory.categoryId()
+
             taskDialog.setCategoryText(selectedCategoryText)
-            
             taskDialog.exec_()
             
             if(taskDialog.result() == TITaskDialog.Accepted):
-                taskText = taskDialog.taskText()
+                taskText = str(taskDialog.taskText())
+
+                dbHandler = self.dbHandler
+                taskId = dbHandler.addTask(taskText, selectedCategoryId)
                 
-                taskWidget = TITaskWidget(taskText)
+                taskWidget = TITaskWidget(taskText, taskId)
             
-                selectedItem.addChild(taskWidget)
-                self.ui.treeWidget.expandItem(selectedItem)
+                selectedCategory.addChild(taskWidget)
+                self.ui.treeWidget.expandItem(selectedCategory)
                 self.tasklistModification(True)
+    
+
+    def editTask(self):
+        selectedTask = self.ui.treeWidget.currentItem()
         
+        if(selectedTask != None):
+            
+            if(not isinstance(selectedTask, TITaskWidget)):
+                return
+                
+            selectedTaskText = selectedTask.taskText()
+            
+            taskInput = TITaskDialog(self)
+            taskInput.setCategoryText(selectedTask.taskCategoryText())
+            taskInput.setTaskText(selectedTaskText)
+            taskInput.exec_()
+            
+            if(taskInput.result() == TITaskDialog.Accepted):
+                selectedTaskId = selectedTask.taskId()
+                updatedTaskText = str(taskInput.taskText())
+                
+                dbHandler = self.dbHandler
+                dbHandler.editTask(selectedTaskId, updatedTaskText)
+                
+                selectedTask.setTaskText(updatedTaskText)
+                self.tasklistModification(True)
+  
+
     def removeTask(self):
         #this could be a task or a subtask
-        selectedItem = self.ui.treeWidget.currentItem()
+        selectedTask = self.ui.treeWidget.currentItem()
         
-        if(selectedItem != None):
-            selectedItemParent = selectedItem.parent()
+        if(selectedTask != None):
+            
+            if(not isinstance(selectedTask, TITaskWidget)):
+                return
+
+            selectedTaskId = selectedTask.taskId()
+
+            dbHandler = self.dbHandler
+            dbHandler.deleteTask(selectedTaskId)
+
+            selectedItemParent = selectedTask.parent()
             
             if(selectedItemParent != None):
                 selectedTaskIndex = self.ui.treeWidget.currentIndex().row()
@@ -130,60 +168,67 @@ class TIMainWindow(QtGui.QMainWindow):
         categoryDialog.exec_()
         
         if(categoryDialog.result() == TICategoryDialog.Accepted):
-            categoryText = categoryDialog.categoryText()
+            categoryText = str(categoryDialog.categoryText())
+
+            dbHandler = self.dbHandler
+            categoryId = dbHandler.addCategory(categoryText)
                         
-            categoryWidget = TICategoryWidget(categoryText)
+            categoryWidget = TICategoryWidget(categoryText, categoryId)
             
             self.ui.treeWidget.addTopLevelItem(categoryWidget)
             self.ui.treeWidget.expandItem(categoryWidget)
             self.tasklistModification(True)
+    
+
+    def editCategory(self):
+        selectedCategory = self.ui.treeWidget.currentItem()
         
+        if(selectedCategory != None):
+            
+            #just edit categories
+            if(not isinstance(selectedCategory, TICategoryWidget)):
+                return
+            
+            selectedCategoryText = selectedCategory.categoryText()
+                        
+            categoryInput = TICategoryDialog(self)
+            categoryInput.setCategoryText(selectedCategoryText)
+            categoryInput.exec_()
+            
+            if(categoryInput.result() == TICategoryDialog.Accepted):
+                #this returns QString so str() it
+                selectedCategoryId = selectedCategory.categoryId()
+                updatedCategoryText = str(categoryInput.categoryText())
+                
+                dbHandler = self.dbHandler
+                dbHandler.editCategory(selectedCategoryId, updatedCategoryText)
+                
+                selectedCategory.setCategoryText(updatedCategoryText)
+                self.tasklistModification(True)
+
+
     def removeCategory(self):
-        selectedCategoryIndex = self.ui.treeWidget.currentIndex().row()
-        self.ui.treeWidget.takeTopLevelItem(selectedCategoryIndex)
-        self.tasklistModification(True)
-        
+        selectedCategory = self.ui.treeWidget.currentItem()
+
+        if(selectedCategory != None):
+            
+            if(not isinstance(selectedCategory, TICategoryWidget)):
+                return
+
+            selectedCategoryId = selectedCategory.categoryId()
+
+            dbHandler = self.dbHandler
+            dbHandler.deleteCategory(selectedCategoryId)
+
+            selectedCategoryIndex = self.ui.treeWidget.currentIndex().row()
+            self.ui.treeWidget.takeTopLevelItem(selectedCategoryIndex)
+            self.tasklistModification(True)
+    
+
     def displayAbout(self):
         aboutDialog = TIAboutDialog(self)
         aboutDialog.exec_()
-        
-    def saveDB(self):
-        if(self.isModified() == True):
-            buttonChoice = QtGui.QMessageBox.warning(self, self.title, "Are you sure you want to overwrite?",
-                                                        QtGui.QMessageBox.Yes | QtGui.QMessageBox.No, QtGui.QMessageBox.No)
-            if(buttonChoice == QtGui.QMessageBox.No):
-                return
-        else: # no modifications, don't do any work
-            return
-                
-        treeModel = self.ui.treeWidget.model()
-        dbHandler = self.dbHandler
-        
-        dbHandler.deleteAllCategories()
-        
-        for rowNumber in range(treeModel.rowCount()):
-            currentModelTextIndex = treeModel.index(rowNumber, textColumnIndex)
-            currentModelIdIndex = treeModel.index(rowNumber, idColumnIndex)
-            
-            categoryText = str(treeModel.data(currentModelTextIndex).toString())
-            
-            category_id = dbHandler.addCategory(categoryText)
-            treeModel.setData(currentModelIdIndex, QtCore.QVariant(category_id))
-            
-            if(treeModel.hasChildren(currentModelTextIndex) == True):
-                for childRowNumber in range(treeModel.rowCount(currentModelTextIndex)):
-                    childModelTextIndex = currentModelTextIndex.child(childRowNumber, textColumnIndex)
-                    childModelIdIndex = currentModelIdIndex.child(childRowNumber, idColumnIndex)
-                    
-                    taskText = str(childModelTextIndex.data().toString())
-                    
-                    childModel = childModelTextIndex.model()
-                    
-                    task_id = dbHandler.addTask(taskText, category_id)
-                    childModel.setData(childModelIdIndex, QtCore.QVariant(task_id))
-            
-            self.tasklistModification(False)        
-        
+           
         
     def loadDB(self):
         if(self.isModified() == True):
@@ -211,88 +256,33 @@ class TIMainWindow(QtGui.QMainWindow):
             self.ui.treeWidget.expandItem(categoryWidget)
             self.tasklistModification(False)
             
-            
+    
+
     def clearWindow(self):
         self.ui.treeWidget.clear()
         self.tasklistModification(True)
-        
-    def editCategory(self):
-        selectedCategory = self.ui.treeWidget.currentItem()
-        
-        if(selectedCategory != None):
-            
-            #just edit categories
-            if(not isinstance(selectedCategory, TICategoryWidget)):
-                return
-            
-            selectedCategoryText = selectedCategory.categoryText()
-                        
-            categoryInput = TICategoryDialog(self)
-            categoryInput.setCategoryText(selectedCategoryText)
-            categoryInput.exec_()
-            
-            if(categoryInput.result() == TICategoryDialog.Accepted):
-                #this returns QString so str() it
-                selectedCategoryId = str(selectedCategory.categoryId())
-                updatedCategoryText = str(categoryInput.categoryText())
-                
-                #dbHandler = self.dbHandler
-                
-                #dbHandler.editCategory(selectedCategoryId, updatedCategoryText)
-                
-                selectedCategory.setCategoryText(updatedCategoryText)
-                self.tasklistModification(True)
-        
-        
-    def editTask(self):
-        selectedTask = self.ui.treeWidget.currentItem()
-        
-        if(selectedTask != None):
-            
-            if(not isinstance(selectedTask, TITaskWidget)):
-                return
-                
-            selectedTaskText = selectedTask.taskText()
-            
-            taskInput = TITaskDialog(self)
-            taskInput.setCategoryText(selectedTask.taskCategoryText())
-            taskInput.setTaskText(selectedTaskText)
-            taskInput.exec_()
-            
-            if(taskInput.result() == TITaskDialog.Accepted):
-                selectedTaskId = str(selectedTask.taskId())
-                updatedTaskText = str(taskInput.taskText())
-                
-                #dbHandler = self.dbHandler
-                #dbHandler.editTask(selectedTaskId, updatedTaskText)
-                
-                selectedTask.setTaskText(updatedTaskText)
-                self.tasklistModification(True)
     
+
     #return status of modification
     #TODO modified() seems to confuse python because it shares a name with an instance variable
     def isModified(self):
         return self.modified
     
+
     def setModified(self, p_ModifiedStatus):
         self.modified = p_ModifiedStatus
-            
-    def tasklistModification(self, p_ModificationStatus):
-        
-        #we're not in modification state
-        if(self.isModified() == False):
-            if(p_ModificationStatus == True):
-                self.setModified(True)
-                self.setWindowTitle(self.title + "*")
-            else:
-                return
-        else: #previous modification
-            if(p_ModificationStatus == False):
-                self.setModified(False)
-                self.setWindowTitle(self.title)
-            else:
-                return
     
+
+    def tasklistModification(self, p_ModificationStatus):
+        """
+            Sets the modification status of the application. This sets
+            the universal "*" in the titlebar and sets an internal flag to
+            warn before desctructive operations.
+        """
+        
+        return
+    
+
     def __displayTask(self, item, column):
         
         if(item != None):
@@ -313,16 +303,4 @@ class TIMainWindow(QtGui.QMainWindow):
             taskDialog.setReadOnlyMode()
             taskDialog.exec_()
                         
-                
-    def exit(self):
-        if(self.isModified() == True):
-            buttonChoice = QtGui.QMessageBox.warning(self, self.title, "You have unsaved modifications, are you sure you want to quit?",
-                                                        QtGui.QMessageBox.Yes | QtGui.QMessageBox.No, QtGui.QMessageBox.No)
-                                                        
-            if(buttonChoice == QtGui.QMessageBox.Yes):
-                self.close()
-            else:
-                return
-        else:
-            self.close()
             

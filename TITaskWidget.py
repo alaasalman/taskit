@@ -38,17 +38,17 @@ class TITaskWidget(QtGui.QTreeWidgetItem):
         
     def taskCategoryId(self):
         taskCategory = self.parent()
-        return taskCategory.text(idColumnIndex)
+        return str(taskCategory.text(idColumnIndex))
         
     def taskCategoryText(self):
         taskCategory = self.parent()
-        return taskCategory.text(textColumnIndex)
+        return str(taskCategory.text(textColumnIndex))
         
     def taskId(self):
-        return self.text(idColumnIndex)
+        return str(self.text(idColumnIndex))
         
     def taskText(self):
-        return self.text(textColumnIndex)
+        return str(self.text(textColumnIndex))
         
     def setTaskText(self, p_TaskText):
         self.setText(textColumnIndex, p_TaskText)

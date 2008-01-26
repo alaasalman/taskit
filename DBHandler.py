@@ -46,7 +46,7 @@ class DBHandler():
         self.session = sessionmaker(bind=engine, autoflush=True, transactional=True)
         
         mapper(Category, categories_table, properties={
-            "tasks":relation(Task, backref="category")
+            "tasks":relation(Task, backref="category", cascade="all, delete")
             })
         
         mapper(Task, tasks_table)
@@ -59,7 +59,7 @@ class DBHandler():
         session = self.session()
         session.save(task)
         session.commit()
-        
+
         return task.id
         
 
@@ -94,6 +94,27 @@ class DBHandler():
         
         session.update(task)
         session.commit()
+
+    def deleteCategory(self, p_CategoryId):
+        session = self.session()
+
+        query = session.query(Category).filter(Category.id==p_CategoryId)
+        
+        category = query.first()
+
+        session.delete(category)
+        session.commit()
+
+    def deleteTask(self, p_TaskId):
+        session = self.session()
+
+        query = session.query(Task).filter(Task.id==p_TaskId)
+
+        task = query.first()
+
+        session.delete(task)
+        session.commit()
+
         
     def getAllCategories(self):
         session = self.session()
@@ -118,11 +139,9 @@ class DBHandler():
         
     def deleteAllCategories(self):
         session = self.session()
-        #FIXME this is better implemented as a cascade operation
+
         for cat in session.query(Category):
-            session.delete(cat)
-            for task in cat.tasks:
-                session.delete(task)
+            session.delete(cat) #tasks get deleted cascade
             
         session.commit()
             

@@ -54,9 +54,6 @@
     <property name="title" >
      <string>File</string>
     </property>
-    <addaction name="actionSave" />
-    <addaction name="actionLoad" />
-    <addaction name="separator" />
     <addaction name="actionExit" />
    </widget>
    <widget class="QMenu" name="menuHelp" >
@@ -91,13 +88,12 @@
     <number>4</number>
    </attribute>
    <addaction name="actionAddTask" />
+   <addaction name="actionEditTask" />
    <addaction name="actionRemoveTask" />
    <addaction name="separator" />
    <addaction name="actionAddCategory" />
-   <addaction name="actionRemoveCategory" />
-   <addaction name="separator" />
    <addaction name="actionEditCategory" />
-   <addaction name="actionEditTask" />
+   <addaction name="actionRemoveCategory" />
    <addaction name="separator" />
    <addaction name="actionExit" />
   </widget>
