@@ -1,6 +1,10 @@
 outdirectory = .
+parentdirectory = ..
 
-all: TaskInputDialog.py CategoryInputDialog.py AboutDialog.py MainWindow.py
+all: TaskInputDialog.py CategoryInputDialog.py AboutDialog.py MainWindow.py DBDir
+
+DBDir:
+	mkdir $(parentdirectory)/db
 
 TaskInputDialog.py: TaskInputDialog.ui
 	pyuic4 TaskInputDialog.ui -o $(outdirectory)/TaskInputDialog.py
