@@ -58,6 +58,7 @@ class TIMainWindow(QtGui.QMainWindow):
         self.setActionIcons()
 
         self.loadDB()
+
         
     def doConnections(self):
         self.connect(self.ui.actionAddTask, QtCore.SIGNAL("triggered()"), self.addTask)
@@ -113,6 +114,8 @@ class TIMainWindow(QtGui.QMainWindow):
                 selectedCategory.addChild(taskWidget)
                 self.ui.treeWidget.expandItem(selectedCategory)
                 self.tasklistModification(True)
+
+                self.ui.treeWidget.setCurrentItem(taskWidget)
     
 
     def editTask(self):
@@ -178,6 +181,8 @@ class TIMainWindow(QtGui.QMainWindow):
             self.ui.treeWidget.addTopLevelItem(categoryWidget)
             self.ui.treeWidget.expandItem(categoryWidget)
             self.tasklistModification(True)
+
+            self.ui.treeWidget.setCurrentItem(categoryWidget)
     
 
     def editCategory(self):
