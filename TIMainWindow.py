@@ -46,8 +46,8 @@ class TIMainWindow(QtGui.QMainWindow):
         
         headerLabels = QtCore.QStringList()
         
-        headerLabels += "Task List"
-        headerLabels += "ID"
+        headerLabels.append("Task List")
+        headerLabels.append("ID")
         
         self.ui.treeWidget.setHeaderLabels(headerLabels)
         self.ui.treeWidget.hideColumn(idColumnIndex)
